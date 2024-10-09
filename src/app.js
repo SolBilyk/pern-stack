@@ -1,5 +1,8 @@
 import express from "express";
 import morgan from "morgan";
+import tareasRoutes from "./router/tareas.routes.js"
+import authRoutes from "./router/auth.routes.js"
+
 
 const app = express(); //esta constante lanza a express
 
@@ -7,9 +10,11 @@ app.use(morgan("dev"));
 //transformamos todos los objetos a formato de javascript
 app.use(express.json());
 //formularios
-app.use(express.urlencoded({extends: false}));
+app.use(express.urlencoded({extended: false}));
 
 app.get("/", (req, res) => res.json({ message: "Bienvenidos a mi proyecto"}));
+app.use('/api', tareasRoutes);
+app.use('/api', authRoutes);
 
 //Manejador de errores
 app.use((err, req, res, next) => {
