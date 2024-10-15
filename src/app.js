@@ -25,3 +25,5 @@ app.use((err, req, res, next) => {
 });
 
 export default app;
+
+//empezar la clase 2 y para hacer correr el programa poner en la terminal npm run dev 
