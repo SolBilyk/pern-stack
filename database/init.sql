@@ -1,8 +1,14 @@
+-- esto es para la tabla tareas, donde se puede escribir aca o puedo escribir un query directamente en la tabla.
+-- Para escribir en la tabla tengo que tocar donde esta la base de datos general PERN, y poner query tools, luego copio la frase. De ahi para verificar tengo que 
+--Ir a tables, la tabla que quiero ver, refresh y luego view all rows 
 CREATE TABLE tareas (
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(255) UNIQUE NOT NULL,
     descripcion TEXT, 
+
 );
+
+ALTER TABLE tareas ADD COLUMN usuario_id IN INTEGER REFERENCES usuarios(id);
 
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
@@ -12,3 +18,7 @@ CREATE TABLE usuarios (
     fecha_registro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     fecha_actualizacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE usuarios ADD COLUMN gravatar VARCHAR(255)
+
+--video 3 8:25 min
