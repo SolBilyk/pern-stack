@@ -1,6 +1,7 @@
 import {pool} from "../db.js"
 import bcrypt from "bcrypt";
 import {createAccessToken} from "../libs/jwt.js"
+import md5 from "md5";
 
 export const signin = async(req, res) => {
     const {email, password} = req.body;
@@ -35,9 +36,11 @@ export const signup = async(req, res, next) => {
     try {
         //encriptamos el password usando la libreria bcrypt (el numero es la canidad de veces que se repite el algoritmos)
         const hashedPassword = await bcrypt.hash(password, 10);
-        console.log(hashedPassword);
+        //console.log(hashedPassword);
+        md5(email);
+        const gravatar = "https://gravatar.com/avatar" + md5(email); // Le pedimos que guarde en esta constante lo viene de este hash, que seria el id del mail asociado que tiene gravatar
 
-        const result = await pool.query('INSERT INTO usuarios (name, email, password) VALUES ($1, $2, $3) Returning *', [name, email, hashedPassword])
+        const result = await pool.query('INSERT INTO usuarios (name, email, password, gravatar) VALUES ($1, $2, $3, $4) Returning *', [name, email, hashedPassword, gravatar])
         //Le indica al usuario que el usuario ya esta creado y autentificado entonces podes usar estos datos que te voy a mandar, o sugerir. en base a esos datos manda un token y desde el backend se pueden controlar los permisos que se le dan al usuario
         //hacemos el token en otra carpeta, la libs
         const token = await createAccessToken({id: result.rows[0].id});
