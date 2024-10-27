@@ -3,10 +3,18 @@ import morgan from "morgan";
 import tareasRoutes from "./router/tareas.routes.js"
 import authRoutes from "./router/auth.routes.js"
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express(); //esta constante lanza a express
 //Middlewares
 app.use(morgan("dev"));
+//CORS esto evita que nos de un error por las URLS cualquier url (pagina) le puede pedir datos al back que hemos creado
+app.use(cors(
+    {
+        origin: "http://localhost:5173",  //esta es la url que puede pedir los datos 
+        credentials: true   //este es la linea de codigo que permite que se vaya el error
+    }
+)); 
 //transformamos todos los objetos a formato de javascript
 //cookieParser
 app.use(cookieParser());

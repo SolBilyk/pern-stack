@@ -24,7 +24,8 @@ export const signin = async(req, res) => {
     const token = await createAccessToken({id: result.rows[0].id});
         console.log(result);
         res.cookie("token", token, {
-            httpOnly: true,
+            //httpOnly: true,
+            secure: true,
             sameSite: "none",
             maxAge: 60 * 60 * 24 * 1000,}); 
         return res.json(result.rows[0]);
@@ -46,7 +47,8 @@ export const signup = async(req, res, next) => {
         const token = await createAccessToken({id: result.rows[0].id});
         console.log(result);
         res.cookie("token", token, {
-            httpOnly: true,
+            //httpOnly: true,
+            secure: true,
             sameSite: "none",
             maxAge: 60 * 60 * 24 * 1000,}); 
             //solo para que lo lean las http, sameSite solo lo lee el mismo sitio el valor es none porque el frontend se puede tener en distinto dominio, maxAge es cuanto quiero que dure la cookie 1000 milisegundos, total 1 dia
