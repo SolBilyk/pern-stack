@@ -3,8 +3,10 @@
 
 import Navbar from './components/navbar/Navbar'
 import { Container } from './components/ui'
+import { ProtectedRoute } from './components/ProtectedRoute'
+import { useAuth } from './context/AuthContext'
 
-import { Routes, Route} from 'react-router-dom' //Sirve para reagrupar todas las paginas que queremos para poder tener diferentes paginas y rutas, por ej una para el perfil, otra para tareas, etc 
+import { Routes, Route } from 'react-router-dom' //Sirve para reagrupar todas las paginas que queremos para poder tener diferentes paginas y rutas, por ej una para el perfil, otra para tareas, etc 
 
 import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
@@ -19,23 +21,35 @@ import NotFound from './pages/NotFound'
 
 
 function App() {
-  return ( 
+
+  const { isAuth } = useAuth();
+  console.log(isAuth);
+
+
+  return (
     <>
-    <Navbar />
-    <Container className="py-5">
-      <Routes>
-        <Route path='/' element={<HomePage/>} />
-        <Route path='/about' element={<AboutPage/>} />
-        <Route path='/login' element={<LoginPage/>} />
-        <Route path='/register' element={<RegisterPage/>} />
-        
-        <Route path='/perfil' element={<ProfilePage/>}/>
-        <Route path='/tareas' element={<TareasPage/>} />
-        <Route path='/tareas/crear' element={<TareaFormPage />} />
-        <Route path='/tareas/editar/:id' element={<TareaFormPage/>} />
-        <Route path='*' element={<NotFound/>} />
-      </Routes>
-    </Container>
+      <Navbar />
+      <Container className="py-5">
+        <Routes>
+          <Route element={<ProtectedRoute isAllowed={!isAuth} redirecTo="/tareas" />}> {/*Si no esta autentificado puede ver todas estas rutas */}
+            {/* RUTAS PUBLICAS - Esta es una sola ruta  */}
+            <Route path='/' element={<HomePage />} />
+            <Route path='/about' element={<AboutPage />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/register' element={<RegisterPage />} />
+          </Route>
+
+          <Route element={<ProtectedRoute isAllowed={isAuth}  redirecTo="/login" />} >  {/*Si esta autentificado ya puede ver todas estas rutas */}
+            {/* RUTAS PRIVADAS - Estas son varias rutas */}
+            <Route path='/perfil' element={<ProfilePage />} />
+            <Route path='/tareas' element={<TareasPage />} />
+            <Route path='/tareas/crear' element={<TareaFormPage />} />
+            <Route path='/tareas/editar/:id' element={<TareaFormPage />} />
+          </Route>
+
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </Container>
 
     </>
   );

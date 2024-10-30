@@ -60,6 +60,14 @@ export function AuthProvider ({ children }) {
         }
     };
 
+    //  SIGNOUT
+    const signout = async () => {
+        const res = await axios.post("/signout");
+        setUser(null);
+        setIsAuth(false);
+        return res.data;
+    }
+
     useEffect(() => {  //Esto le pide al backend de vuelta que lea la cookie y que nos proporcione nuevamente los datos al frontend y que no se salga de la aplicacion cuando el usuario hace el login
         //el js-cookie que instalamos permite instalar las cookies (esto es del front) de una forma sencilla
         //console.log(Cookie.get('token'))
@@ -89,7 +97,7 @@ export function AuthProvider ({ children }) {
         signup,
         setUser,
         signin,
-        
+        signout,
     }}>
         {children}
     </AuthContext.Provider>
