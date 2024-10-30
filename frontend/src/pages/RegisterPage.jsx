@@ -1,5 +1,5 @@
 
-import {Button, Card, Input, Label} from "../components/ui"
+import {Button, Card, Input, Label, Container} from "../components/ui"
 import {useForm} from "react-hook-form"; //permite crear en onstage
 import {useAuth} from "../context/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
@@ -19,7 +19,7 @@ function RegisterPage() {
     
 
   return (
-    <div  className="h-[calc(100vh-64px)] flex items-center justify-center">      
+    <Container  className="h-[calc(100vh-10rem)] flex items-center justify-center">      
       <Card>
       {setUserErrors &&
           setUserErrors.map((error) => (
@@ -61,7 +61,7 @@ function RegisterPage() {
           <Link to="/login" >   Iniciar Sesión </Link>
         </div>
       </Card>
-    </div>
+    </Container>
       
   );
 }
