@@ -8,18 +8,24 @@ function RegisterPage() {
 
   const {register, handleSubmit, formState: {errors}} = useForm();
 
-  const {signup} = useAuth();
+  const {signup, errors: setUserErrors} = useAuth();
   const navigate = useNavigate(); 
   const onSubmit = handleSubmit(async(data) => {
-    await signup(data);
-    navigate("/perfil");
+    const user = await signup(data); //Si el usuario existe, redirigilo, sino no hagas nada, quedate ahi
+    if(user) {
+      navigate("/perfil");
+    }
   });
     
 
   return (
-    <div  className="h-[calc(100vh-64px)] flex items-center justify-center">
-      
+    <div  className="h-[calc(100vh-64px)] flex items-center justify-center">      
       <Card>
+      {setUserErrors &&
+          setUserErrors.map((error) => (
+            // eslint-disable-next-line react/jsx-key
+            <p className="bg-red-500 text-white p-2">{error}</p>
+          ))}
       <h3 className='text-4xl font-bold my-2' >Registro</h3>
         <form onSubmit={onSubmit}> 
           <Label htmlFor="name"> Nombre </Label>

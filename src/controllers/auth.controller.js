@@ -23,9 +23,9 @@ export const signin = async(req, res) => {
     //Como ya estamos logueados, tenemos el token, la cookie, en el signup, debemos hacerlo tambien aca 
     const token = await createAccessToken({id: result.rows[0].id});
         console.log(result);
-        res.cookie("token", token, {
+        res.cookie('token', token, {
             //httpOnly: true,
-            //secure: true,
+            secure: true,
             sameSite: "none",
             maxAge: 60 * 60 * 24 * 1000,}); 
         return res.json(result.rows[0]);
@@ -48,7 +48,7 @@ export const signup = async(req, res, next) => {
         console.log(result);
         res.cookie("token", token, {
             //httpOnly: true,
-            //secure: true,
+            secure: true,
             sameSite: "none",
             maxAge: 60 * 60 * 24 * 1000,}); 
             //solo para que lo lean las http, sameSite solo lo lee el mismo sitio el valor es none porque el frontend se puede tener en distinto dominio, maxAge es cuanto quiero que dure la cookie 1000 milisegundos, total 1 dia

@@ -7,17 +7,25 @@ import { useAuth } from "../context/AuthContext";
 function LoginPage() {
 
   const {register, handleSubmit} = useForm();
-  const {signin} = useAuth();
+  const {signin, errors} = useAuth();
   const navigate = useNavigate();
   const onSubmit = handleSubmit(async(data) => {
-    await signin(data);
-    navigate("/perfil");
+    const user = await signin(data); //Si el usuario existe, redirigilo, sino no hagas nada, quedate ahi
+    if(user) {
+      navigate("/perfil");
+    }
+    
   });
 
 
   return (
     <div className="h-[calc(100vh-64px)] flex items-center justify-center">
       <Card>
+        {errors && 
+          errors.map((error) => (
+            // eslint-disable-next-line react/jsx-key
+            <p className="bg-red-500  text-white  p-2"> {error}</p> //tuve que agregar la palabra key={1} para que esa linea no me diera error, no sale en el codigo original
+        ))}
         <h1 className="text-4xl font-bold my-2 text-center"> Iniciar sesión </h1>
 
         <form onSubmit={onSubmit}>
