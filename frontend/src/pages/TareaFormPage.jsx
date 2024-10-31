@@ -30,7 +30,7 @@ function TareaFormPage() {
       <Card>
         {
           postError.map((error, i) => (
-            // eslint-disable-next-line react/jsx-key
+
             <p className="bg-red-500 text-white p-2" key={i}> {error}</p>
           ))
         }
