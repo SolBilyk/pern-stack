@@ -3,10 +3,13 @@
 
 import Navbar from './components/navbar/Navbar'
 import { Container } from './components/ui'
-import { ProtectedRoute } from './components/ProtectedRoute'
-import { useAuth } from './context/AuthContext'
 
-import { Routes, Route } from 'react-router-dom' //Sirve para reagrupar todas las paginas que queremos para poder tener diferentes paginas y rutas, por ej una para el perfil, otra para tareas, etc 
+import { ProtectedRoute } from './components/ProtectedRoute'
+
+import { useAuth } from './context/AuthContext'
+import { TareasProvider } from './context/TareasContext';
+
+import { Routes, Route, Outlet } from 'react-router-dom' //Sirve para reagrupar todas las paginas que queremos para poder tener diferentes paginas y rutas, por ej una para el perfil, otra para tareas, etc 
 
 import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
@@ -23,7 +26,7 @@ import NotFound from './pages/NotFound'
 function App() {
 
   const { isAuth } = useAuth();
-  console.log(isAuth);
+
 
 
   return (
@@ -39,12 +42,17 @@ function App() {
             <Route path='/register' element={<RegisterPage />} />
           </Route>
 
-          <Route element={<ProtectedRoute isAllowed={isAuth}  redirecTo="/login" />} >  {/*Si esta autentificado ya puede ver todas estas rutas */}
+          <Route element={<ProtectedRoute isAllowed={isAuth} redirecTo="/login" />} >  {/*Si esta autentificado ya puede ver todas estas rutas */}
             {/* RUTAS PRIVADAS - Estas son varias rutas */}
             <Route path='/perfil' element={<ProfilePage />} />
-            <Route path='/tareas' element={<TareasPage />} />
-            <Route path='/tareas/crear' element={<TareaFormPage />} />
-            <Route path='/tareas/editar/:id' element={<TareaFormPage />} />
+
+            <Route element={<TareasProvider>
+              <Outlet />
+            </TareasProvider>}>
+              <Route path='/tareas' element={<TareasPage />} />
+              <Route path='/tareas/crear' element={<TareaFormPage />} />
+              <Route path='/tareas/editar/:id' element={<TareaFormPage />} />
+            </Route>
           </Route>
 
           <Route path='*' element={<NotFound />} />

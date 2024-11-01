@@ -1,28 +1,26 @@
 import { Card, Input, Textarea, Label, Button } from "../components/ui"
 import { useForm } from 'react-hook-form'
 import { useNavigate } from "react-router-dom";
-import { crearTareaRequest } from "../api/tareas.api";
 import { useState } from "react";
+import { useTareas } from "../context/TareasContext";
 
 
 
 function TareaFormPage() {
 
-  const { register,
+  const { 
+    register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
   const navigate = useNavigate();
-  const [postError, setPostError] = useState([])
-
+  const [postError, setPostError] = useState([]);
+  const { crearTarea } = useTareas();
   const onSubmit = handleSubmit(async (data) => {   //Cuando se hace asi es para poder reutilizarlo
-    try {
-      const res = await crearTareaRequest(data);
-      navigate = ("/tareas");
-    } catch (error) {
-      setPostError([error.response.data.message]);
+    const res = await crearTarea(data);
+    if (res) {
+      navigate("/tareas");
     }
-
   });
 
   return (
