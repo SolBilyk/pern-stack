@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { crearTareaRequest, eliminarTareaRequest, listarTareasRequest, listarTareaRequest} from "../api/tareas.api";
+import { crearTareaRequest, eliminarTareaRequest, listarTareasRequest, listarTareaRequest, actualizarTareaRequest } from "../api/tareas.api";
 
 
 const TareasContext = createContext();
@@ -48,6 +48,16 @@ export const TareasProvider = ({ children }) => {
         }
     };
 
+    const editarTarea = async (id, tarea) => {
+        try {
+            const res = await actualizarTareaRequest(id, tarea);
+            return res.data;
+        } catch (error) {
+            if (error.response) {
+                setError([error.response.data.message]);
+            }
+        }
+    }
     return (
         <TareasContext.Provider
             value={{
@@ -57,6 +67,7 @@ export const TareasProvider = ({ children }) => {
                 crearTarea,
                 cargarTarea,
                 errors,
+                editarTarea,
             }}
         >
             {children}

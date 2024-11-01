@@ -1,14 +1,14 @@
 import { Card, Input, Textarea, Label, Button } from "../components/ui"
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTareas } from "../context/TareasContext";
 
 
 
 function TareaFormPage() {
 
-  const { 
+  const {
     register,
     handleSubmit,
     formState: { errors },
@@ -20,11 +20,15 @@ function TareaFormPage() {
   console.log(params);
   const navigate = useNavigate();
 
-  const { crearTarea, cargarTarea,  errors: tareasErrors } = useTareas();
+  const { crearTarea, cargarTarea, editarTarea, errors: tareasErrors } = useTareas();
   const onSubmit = handleSubmit(async (data) => {   //Cuando se hace asi es para poder reutilizarlo
-    const res = await crearTarea(data);
-    if (res) {
+    let tarea; //Si existe una variable(local: tarea), sino existe un params id se esta creando una tarea, si si existe es que estas editando.
+    if (!params.id) {
+      tarea = await crearTarea(data);
       navigate("/tareas");
+    } else {
+      tarea = await editarTarea(params.id, data);
+        navigate("/tareas");
     }
   });
 
