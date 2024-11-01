@@ -2,66 +2,58 @@
 //si esta autentificado o no, nos dice si hay errores y se le puede dar algunos accesos a determinadas secciones o paginas de nuestra aplicacion
 
 // El provider espera un elemento hijo y retorna el context provider
-import { createContext, useContext, useState, useEffect } from "react";  
-import Cookie from 'js-cookie';
+import { createContext, useState, useContext, useEffect } from "react";
+import Cookie from "js-cookie";
 import axios from "../api/axios";
 
+export const AuthContext = createContext();
 
-export const AuthContext= createContext();
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const useAuth = () =>{
+export const useAuth = () => {
     const context = useContext(AuthContext);
-    if(!context){
+    if (!context) {
         throw new Error("useAuth must be used within AuthProvider");
     }
     return context;
-} 
+};
 
-
-//se va a colocar en main.js donde se ejecuta toda la aplicacion completa
 // eslint-disable-next-line react/prop-types
-export function AuthProvider ({ children }) {
+export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [isAuth, setIsAuth] = useState(false);
     const [errors, setErrors] = useState(null);
     const [loading, setLoading] = useState(true);
 
-//Se captura el error para el frontend
     const signin = async (data) => {
-        try{
+        try {
             const res = await axios.post("/signin", data);
 
-            //console.log(res.data);
             setUser(res.data);
             setIsAuth(true);
             return res.data;
         } catch (error) {
-            console.log(error)
-            if(Array.isArray(error.response.data)){
-                return setErrors(error.response.data)
+            console.log(error);
+            if (Array.isArray(error.response.data)) {
+                return setErrors(error.response.data);
             }
-            setErrors([error.response.data.message]); //se guarda el error y se muestr como arreglo
+            setErrors([error.response.data.message]);
         }
     };
 
     const signup = async (data) => {
-        try{
+        try {
             const res = await axios.post("/signup", data);
-            //console.log(res.data);
             setUser(res.data);
             setIsAuth(true);
             return res.data;
         } catch (error) {
-            console.log(error)
-            if(Array.isArray(error.response.data)){
-                return setErrors(error.response.data)
+            console.log(error);
+            if (Array.isArray(error.response.data)) {
+                return setErrors(error.response.data);
             }
-            setErrors([error.response.data.message]); //se guarda el error y se muestr como arreglo
+            setErrors([error.response.data.message]);
         }
     };
 
-    //  SIGNOUT
     const signout = async () => {
         const res = await axios.post("/signout");
         setUser(null);
@@ -69,17 +61,9 @@ export function AuthProvider ({ children }) {
         return res.data;
     }
 
-    useEffect(() => {  //Esto le pide al backend de vuelta que lea la cookie y que nos proporcione nuevamente los datos al frontend y que no se salga de la aplicacion cuando el usuario hace el login
-        //el js-cookie que instalamos permite instalar las cookies (esto es del front) de una forma sencilla
-        //console.log(Cookie.get('token'))
-        //const token = Cookie.get('token');
-    //if (token) {
-        //console.log('Token encontrado:', token);
-    //} else {
-        //console.log('Token no encontrado');
-    //}
-        if(Cookie.get('token')) {
-            setLoading(true);
+    useEffect(() => {
+        setLoading(true);
+        if (Cookie.get("token")) {
             axios.get("/profile").then((res) => {
                 setUser(res.data);
                 setIsAuth(true);
@@ -89,21 +73,33 @@ export function AuthProvider ({ children }) {
                 setIsAuth(false);
                 setLoading(false);
                 console.log(error);
-                
             });
         }
+        setLoading(false);
     }, []);
 
-    return <AuthContext.Provider value={{
-        user,
-        isAuth,
-        errors,
-        signup,
-        setUser,
-        signin,
-        signout,
-        loading,
-    }}>
-        {children}
-    </AuthContext.Provider>
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setErrors(null);
+        }, 4000);
+        return () => {
+            clearTimeout(timeout);
+        };
+    }, [errors]);
+    return (
+        <AuthContext.Provider
+            value={{
+                user,
+                isAuth,
+                errors,
+                signup,
+                setUser,
+                signin,
+                signout,
+                loading,
+            }}
+        >
+            {children}
+        </AuthContext.Provider>
+    );
 }

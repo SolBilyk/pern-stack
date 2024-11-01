@@ -7,13 +7,13 @@ import { useAuth } from "../context/AuthContext";
 
 function LoginPage() {
 
-  const {register, handleSubmit} = useForm();
-  const {signin, errors} = useAuth();
+  const {register, handleSubmit, formState: {errors}} = useForm();
+  const {signin, errors: loginErrors} = useAuth();
   const navigate = useNavigate();
   const onSubmit = handleSubmit(async(data) => {
     const user = await signin(data); //Si el usuario existe, redirigilo, sino no hagas nada, quedate ahi
     if(user) {
-      navigate("/perfil");
+      navigate("/tareas");
     }
     
   });
@@ -22,8 +22,8 @@ function LoginPage() {
   return (
     <Container className="h-[calc(100vh-10rem)] flex items-center justify-center">
       <Card>
-        {errors && 
-          errors.map((error) => (
+        {loginErrors && 
+          loginErrors.map((error) => (
             // eslint-disable-next-line react/jsx-key
             <p className="bg-red-500  text-white  p-2"> {error}</p> //tuve que agregar la palabra key={1} para que esa linea no me diera error, no sale en el codigo original
         ))}
@@ -38,6 +38,9 @@ function LoginPage() {
               required: true,
           })}
           ></Input>
+          {
+            errors.email && <p className="text-red-500">Este campo es requerido</p>
+          }
           <Label htmlFor="password"> Contraseña </Label>
           <Input 
             type="password"
@@ -46,10 +49,13 @@ function LoginPage() {
               required: true,
             })}
             ></Input>
+            {
+            errors.password && <p className="text-red-500">Este campo es requerido</p>
+          }
           <Button> Ingresar </Button>
         </form>
         <div className="flex justify-between my-4">
-          <p> ¿No tienes cuenta? </p>
+          <p className="mr-4"> ¿No tienes cuenta? </p>
           <Link to="/register"> Registrate </Link>
         </div>
       </Card>

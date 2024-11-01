@@ -29,11 +29,8 @@ function App() {
 
 
   if (loading) {
-    setTimeout(() => {
-      return <h1>Loading ...</h1>;
-    }, 1000);
-  }
-
+      return <h1>Cargando ...</h1>;
+    }
 
 
   return (
