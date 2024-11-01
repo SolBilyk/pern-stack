@@ -24,4 +24,3 @@ CREATE TABLE usuarios (
 
 ALTER TABLE usuarios ADD COLUMN gravatar VARCHAR(255)
 
---video 3 8:25 min
