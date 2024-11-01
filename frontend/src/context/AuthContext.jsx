@@ -25,6 +25,7 @@ export function AuthProvider ({ children }) {
     const [user, setUser] = useState(null);
     const [isAuth, setIsAuth] = useState(false);
     const [errors, setErrors] = useState(null);
+    const [loading, setLoading] = useState(true);
 
 //Se captura el error para el frontend
     const signin = async (data) => {
@@ -78,12 +79,15 @@ export function AuthProvider ({ children }) {
         //console.log('Token no encontrado');
     //}
         if(Cookie.get('token')) {
-            axios.get("http://localhost:3000/api/profile").then((res) => {
+            setLoading(true);
+            axios.get("/profile").then((res) => {
                 setUser(res.data);
                 setIsAuth(true);
+                setLoading(false);
             }).catch((error) => {
                 setUser(null);
                 setIsAuth(false);
+                setLoading(false);
                 console.log(error);
                 
             });
@@ -98,6 +102,7 @@ export function AuthProvider ({ children }) {
         setUser,
         signin,
         signout,
+        loading,
     }}>
         {children}
     </AuthContext.Provider>

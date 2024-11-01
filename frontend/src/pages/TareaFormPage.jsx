@@ -1,7 +1,7 @@
 import { Card, Input, Textarea, Label, Button } from "../components/ui"
 import { useForm } from 'react-hook-form'
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useTareas } from "../context/TareasContext";
 
 
@@ -12,10 +12,15 @@ function TareaFormPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
+
+
+  const params = useParams();
+  console.log(params);
   const navigate = useNavigate();
-  const [postError, setPostError] = useState([]);
-  const { crearTarea } = useTareas();
+
+  const { crearTarea, cargarTarea,  errors: tareasErrors } = useTareas();
   const onSubmit = handleSubmit(async (data) => {   //Cuando se hace asi es para poder reutilizarlo
     const res = await crearTarea(data);
     if (res) {
@@ -23,16 +28,25 @@ function TareaFormPage() {
     }
   });
 
+  useEffect(() => {
+    if (params.id) {
+      cargarTarea(params.id).then(tarea => {
+        setValue("titulo", tarea.titulo);
+        setValue("descripcion", tarea.descripcion);
+      });
+    }
+  }, []);
+
   return (
     <div className="flex h-[80vh] justify-center items-center">
       <Card>
         {
-          postError.map((error, i) => (
+          tareasErrors.map((error, i) => (
 
             <p className="bg-red-500 text-white p-2" key={i}> {error}</p>
           ))
         }
-        <h2 className=" text-3xl font-bold my-4" >Formulario de Tareas </h2>
+        <h2 className=" text-3xl font-bold my-4" > {params.id ? "Editar Tarea" : "Crear Tarea"} </h2>
         <form onSubmit={onSubmit}>
           <Label htmlFor="titulo" > Título </Label>
           <Input type="text" placeholder="Titulo"
