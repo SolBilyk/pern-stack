@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import {CardTareas} from '../components/tareas/CardTareas';
+import CardTareas from '../components/tareas/cardtareas_temp';
+
 
 import { useTareas } from "../context/TareasContext";
 
@@ -31,3 +32,5 @@ function TareasPage() {
 }
 
 export default TareasPage;
+
+
