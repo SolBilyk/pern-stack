@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { CardTareas } from '../components/tareas';
+import { CardTareas } from '../components/tareas/CardTareas';
 import { useTareas } from "../context/TareasContext";
 
 
