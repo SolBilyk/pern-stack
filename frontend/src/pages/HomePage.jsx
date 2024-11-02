@@ -3,6 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { Card } from "../components/ui";
 
 function HomePage() {
+  // eslint-disable-next-line no-unused-vars
   const data = useContext(AuthContext);
   return (
     <Card>

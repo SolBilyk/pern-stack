@@ -1,34 +1,42 @@
-import { Card, Button } from "../ui"
+import { Card, Button } from "../ui";
 import { useTareas } from "../../context/TareasContext";
 import { useNavigate } from "react-router-dom";
-import { PiTrashBold, PiPencil } from 'react-icons/pi';
+import { PiTrashSimpleLight, PiPencil } from "react-icons/pi";
 
+// eslint-disable-next-line react/prop-types
 export function CardTareas({ tarea }) {
     const { eliminarTarea } = useTareas();
     const navigate = useNavigate();
     return (
-
-        <Card key={tarea.id} className='py-4 px-7 justify-center flex flex-col ' >
+        // eslint-disable-next-line react/prop-types
+        <Card key={tarea.id} className="py-4 px-7 justify-center flex flex-col">
             <div>
+                {/* eslint-disable-next-line react/prop-types */}
                 <h1 className="text-2xl font-bold">{tarea.titulo}</h1>
+                {/* eslint-disable-next-line react/prop-types */}
                 <p className="py-4">{tarea.descripcion}</p>
             </div>
-
             <div className="flex justify-end gap-x-2">
+                {/* eslint-disable-next-line react/prop-types */}
+                <Button onClick={() => navigate(`/tareas/${tarea.id}/editar`)}>
+                    <PiPencil className="text-white" />
+                    editar
+                </Button>
                 <Button
-                    onClick={() => navigate(`/tareas/${tarea.id}/editar`)}
-                ><PiPencil className="text-white" /> Editar</Button>
-
-                <Button className="bg-red-500 hover:bg-red-600"
+                    className="bg-red-500 hover:bg-red-600"
                     onClick={async () => {
-                        if (window.confirm("¿Estás seguro de eliminar esta tarea?")) {
+                        if (window.confirm("¿Estas seguro de eliminar esta tarea?")) {
+                            // eslint-disable-next-line react/prop-types
                             await eliminarTarea(tarea.id);
                         }
-                    }}> <PiTrashBold className="text-white" /> Eliminar
+                    }}
+                >
+                    <PiTrashSimpleLight className="text-white" />
+                    eliminar
                 </Button>
             </div>
         </Card>
-    )
+    );
 }
 
 export default CardTareas;

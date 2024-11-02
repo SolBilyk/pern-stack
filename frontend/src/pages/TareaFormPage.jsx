@@ -27,7 +27,8 @@ function TareaFormPage() {
       tarea = await crearTarea(data);
       navigate("/tareas");
     } else {
-      tarea = await editarTarea(params.id, data);
+      // eslint-disable-next-line no-unused-vars
+      tarea = await editarTarea(params.id, data);  //SACAMOS ESTE VALOR DE ACA 
         navigate("/tareas");
     }
   });

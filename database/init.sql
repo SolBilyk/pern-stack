@@ -23,4 +23,3 @@ CREATE TABLE usuarios (
 );
 
 ALTER TABLE usuarios ADD COLUMN gravatar VARCHAR(255)
-
