@@ -32,7 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => res.json({ message: "Bienvenidos a mi proyecto" }));
-app.get("/api/ping", async (req, res) => {
+app.get("/api/ping", async(req, res) => {
     const result = await pool.query("SELECT NOW()");
     res.json(result.rows[0]);
 });
